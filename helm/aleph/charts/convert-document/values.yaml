@@ -1,0 +1,50 @@
+# Deployment - templates/deployment.yaml
+strategy:
+  rollingUpdate:
+    maxSurge: 2
+    maxUnavailable: 70%
+  type: RollingUpdate
+
+podAnnotations:
+  "cluster-autoscaler.kubernetes.io/safe-to-evict": "true"
+
+nodeSelector:
+  lifespan: transient
+
+podSecurityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+
+image:
+  repository: alephdata/convert-document
+  pullPolicy: Always
+  tag: "d1ce0b9618d588a6600eb0a81ceec1c62172b1ac"
+
+containerSecurityContext:
+  readOnlyRootFilesystem: true
+
+containerResources:
+  requests:
+    memory: 120Mi
+    cpu: 300m
+  limits:
+    memory: 500Mi
+    # cpu: 2000m
+
+# Service - templates/service.yaml
+
+service:
+  type: ClusterIP
+  port: 3000
+
+# Scaling - templates/hpa.yaml
+
+hpa:
+  minReplicas: 2
+  maxReplicas: 30
+  scalingMetrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 50

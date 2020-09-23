@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aleph-ui
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: aleph-ui
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: aleph-ui
+  strategy: {{- toYaml .Values.strategy | nindent 4 }}
+  template:
+    metadata:
+      labels:
+        app: aleph-ui
+      annotations: {{- toYaml .Values.podAnnotations | nindent 8 }}
+    spec:
+      nodeSelector: {{- toYaml .Values.nodeSelector | nindent 8 }}
+      restartPolicy: Always
+      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: nginx
+          image: "{{ .Values.image.repository }}:{{ .Values.global.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: aleph-ui-config
+              mountPath: /etc/nginx
+              readOnly: true
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          resources:
+            {{- toYaml .Values.containerResources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 5
+      volumes:
+        - name: aleph-ui-config
+          configMap:
+            name: aleph-ui-config

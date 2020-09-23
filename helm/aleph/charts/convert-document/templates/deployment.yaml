@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: convert-document
+  # namespace: {{.Values.global.namespace}}
+  labels:
+    app: convert-document
+spec:
+  selector:
+    matchLabels:
+      app: convert-document
+  strategy: {{- toYaml .Values.strategy | nindent 6}}
+  template:
+    metadata:
+      labels:
+        app: convert-document
+      annotations: {{- toYaml .Values.podAnnotations | nindent 8}}
+    spec:
+      nodeSelector: {{- toYaml .Values.nodeSelector | nindent 8}}
+      restartPolicy: Always
+      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8}}
+      containers:
+        - name: {{.Chart.Name}}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{.Values.image.pullPolicy}}
+          ports:
+            - containerPort: 3000
+              name: http
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp-volume
+            - mountPath: /home/app
+              name: home-volume
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12}}
+          resources: {{- toYaml .Values.containerResources | nindent 12}}
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 3000
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+            periodSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 3000
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+            periodSeconds: 10
+            failureThreshold: 1
+      volumes:
+        - name: home-volume
+          emptyDir: {}
+        - name: tmp-volume
+          emptyDir: {}

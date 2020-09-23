@@ -1,0 +1,18 @@
+global:
+  google: false
+  image:
+    repository: alephdata/aleph
+    tag: "be053077cc896ab688d4129b9d962f2694f4741f"
+  env:
+    ALEPH_APP_TITLE: "Aleph Dev"
+    ALEPH_APP_DESCRIPTION: "Dev archive of research material for investigative reporting."
+    ALEPH_UI_URL: http://aleph.devel
+    ALEPH_ELASTICSEARCH_URI: http://search-index-data-headless.dev.svc.cluster.local:9200
+    REDIS_URL: redis://redis-headless.dev.svc.cluster.local:6379/0
+    ARCHIVE_TYPE: s3
+    ARCHIVE_BUCKET: aleph-archive
+    AWS_DEFAULT_REGION: eu-west-1
+
+ingest-file:
+  env:
+    INGESTORS_CONVERT_DOCUMENT_URL: http://convert-document.dev.svc.cluster.local:3000/convert

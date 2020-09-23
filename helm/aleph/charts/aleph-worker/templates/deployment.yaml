@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aleph-worker
+  # namespace: {{ .Values.global.namespace }}
+  labels:
+    app: aleph-worker
+spec:
+  selector:
+    matchLabels:
+      app: aleph-worker
+  strategy: {{- toYaml .Values.strategy | nindent 4 }}
+  template:
+    metadata:
+      labels:
+        app: aleph-worker
+      annotations: {{- toYaml .Values.podAnnotations | nindent 8 }}
+    spec:
+      nodeSelector: {{- toYaml .Values.nodeSelector | nindent 8 }}
+      restartPolicy: Always
+      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["aleph", "worker"]
+          volumeMounts:
+            {{ if .Values.global.google }}
+            - mountPath: /var/secrets/google
+              name: aleph-worker-service-account
+              readOnly: true
+            {{ end }}
+            - mountPath: /tmp
+              name: tmp-volume
+            - mountPath: /home/app
+              name: home-volume
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          resources:
+            {{- toYaml .Values.containerResources | nindent 12 }}
+          env:
+            {{- range $key, $value := .Values.global.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}  
+            {{- range $key, $value := .Values.global.secretenv }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }} 
+      volumes:
+        {{ if .Values.global.google }}
+        - name: aleph-worker-service-account
+          secret:
+            secretName: aleph-worker-service-account
+        {{ end }}
+        - name: home-volume
+          emptyDir:
+            medium: Memory
+        - name: tmp-volume
+          emptyDir:
+            medium: Memory

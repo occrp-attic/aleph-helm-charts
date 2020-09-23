@@ -1,0 +1,11 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: search-ingest-file-policy
+  # namespace: {{.Values.global.namespace}}
+spec:
+  podSelector:
+    matchLabels:
+      app: search-ingest-file
+  policyTypes:
+    - Ingress

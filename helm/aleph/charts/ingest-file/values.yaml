@@ -1,0 +1,54 @@
+strategy:
+  rollingUpdate:
+    maxSurge: 20
+    maxUnavailable: 100%
+  type: RollingUpdate
+
+podAnnotations:
+  "cluster-autoscaler.kubernetes.io/safe-to-evict": "true"
+
+nodeSelector:
+  tier: application
+  lifespan: transient
+
+podSecurityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+
+terminationGracePeriodSeconds: 300
+
+image:
+  repository: alephdata/ingest-file
+  pullPolicy: Always
+
+containerSecurityContext:
+  readOnlyRootFilesystem: true
+
+containerResources:
+  requests:
+    cpu: 300m
+    memory: 2000Mi
+  limits:
+    # cpu: 1000m
+    memory: 3000Mi
+
+google: false
+
+env:
+  # Needs google credentials only to access Google Storage and Vision API
+  # GOOGLE_APPLICATION_CREDENTIALS: /var/secrets/google/service-account.json
+  WORKER_THREADS: 0
+  OCR_VISION_API: false
+  INGESTORS_CONVERT_DOCUMENT_URL: http://convert-document.default.svc.cluster.local:3000/convert
+
+# Scaling - templates/hpa.yaml
+
+hpa:
+  minReplicas: 5
+  maxReplicas: 60
+  scalingMetrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 100

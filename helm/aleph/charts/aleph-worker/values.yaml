@@ -1,0 +1,48 @@
+strategy:
+  rollingUpdate:
+    maxSurge: 2
+    maxUnavailable: 100%
+  type: RollingUpdate
+
+podAnnotations: {}
+
+nodeSelector:
+  tier: application
+
+podSecurityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+
+image:
+  pullPolicy: Always
+
+containerSecurityContext:
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+
+containerResources:
+  requests:
+    cpu: 301m
+    memory: 300Mi
+  limits:
+    # cpu: 1000m
+    memory: 800Mi
+
+google: false
+
+env:
+  # Needs google credentials only to access Google Storage and Vision API
+  # GOOGLE_APPLICATION_CREDENTIALS: /var/secrets/google/service-account.json
+  WORKER_THREADS: 5
+
+# Scaling - templates/hpa.yaml
+
+hpa:
+  minReplicas: 2
+  maxReplicas: 5
+  scalingMetrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 50

@@ -1,0 +1,44 @@
+global:
+  google: false
+
+  image:
+    repository: alephdata/aleph
+    tag: "ac7fc31c8538364166849e3a8e8e52721ecc5c59"
+
+  env:
+    ALEPH_DEBUG: "false"
+    ALEPH_CACHE: "true"
+    ALEPH_FORCE_HTTPS: "false"
+    ALEPH_APP_TITLE: "Aleph"
+    ALEPH_APP_DESCRIPTION: "The global archive of research material for investigative reporting."
+    ALEPH_PAGES_PATH: "/aleph/site/aleph.occrp.org/pages"
+    ALEPH_APP_NAME: aleph
+    # ALEPH_CONTENT_POLICY: "default-src 'self' 'unsafe-inline' 'unsafe-eval' *.occrp.org *.googleapis.com; connect-src 'self' *.occrp.org *.googleapis.com; img-src data: blob: *.occrp.org *.googleapis.com;"
+    # ALEPH_GOOGLE_REQUEST_LOGGING: "true"
+    ALEPH_PASSWORD_LOGIN: "true"
+    # ALEPH_ADMINS: pudo@occrp.org
+    # ALEPH_MAIL_FROM: notifications@aleph.occrp.org
+    # ALEPH_MAIL_HOST: core-mail.default.svc.cluster.local
+    # ALEPH_MAIL_USERNAME: ""
+    # ALEPH_MAIL_PASSWORD: ""
+    # ALEPH_MAIL_PORT: "25"
+    # ALEPH_MAIL_TLS: "false"
+    # ALEPH_MAIL_SSL: "false"
+    ALEPH_UI_URL: http://localhost
+    # ALEPH_FAVICON: https://cdn.occrp.org/common/logo/RedTransparent_globe.png
+    # ALEPH_LOGO: https://cdn.occrp.org/common/logo/WhiteTransparent_globe.png
+    ALEPH_ELASTICSEARCH_URI: http://search-index-data-headless.default.svc.cluster.local:9200
+    ALEPH_INDEX_PREFIX: "aleph"
+    ALEPH_INDEX_WRITE: "v2"
+    ALEPH_INDEX_READ: "v1:v2"
+    ALEPH_INDEX_REPLICAS: "2"
+    ALEPH_API_RATE_LIMIT: "600"
+    ALEPH_OAUTH: "false"
+    # ALEPH_OAUTH_KEY: data-occrp-org
+    # ALEPH_OAUTH_HANDLER: keycloak
+    # ALEPH_OAUTH_SCOPE: read
+    # ALEPH_OAUTH_BASE_URL: https://secure.occrp.org/
+    # ALEPH_OAUTH_TOKEN_URL: https://secure.occrp.org/auth/realms/general/protocol/openid-connect/token
+    # ALEPH_OAUTH_AUTHORIZE_URL: https://secure.occrp.org/auth/realms/general/protocol/openid-connect/auth
+    REDIS_URL: redis://redis-headless.default.svc.cluster.local:6379/0
+    ELASTICSEARCH_TIMEOUT: "600"

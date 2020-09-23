@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: convert-document
+  # namespace: {{.Values.global.namespace}}
+  labels:
+    app: convert-document
+spec:
+  selector:
+    app: convert-document
+  type: {{.Values.service.type}}
+  ports:
+    - port: {{.Values.service.port}}
+      protocol: "TCP"
+      name: api

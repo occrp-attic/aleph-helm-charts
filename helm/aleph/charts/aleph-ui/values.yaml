@@ -1,0 +1,78 @@
+replicas: 2
+
+strategy:
+  rollingUpdate:
+    maxSurge: 2
+    maxUnavailable: 50%
+  type: RollingUpdate
+
+podAnnotations:
+  "cluster-autoscaler.kubernetes.io/safe-to-evict": "true"
+
+nodeSelector:
+  lifespan: transient
+
+podSecurityContext: {}
+
+image:
+  repository: alephdata/aleph-ui-production
+  pullPolicy: Always
+
+containerSecurityContext: {}
+
+containerResources:
+  requests:
+    cpu: 50m
+    memory: 21Mi
+
+# Nginx config - templates/config-map.yaml
+
+nginxConfig:
+  mime.types: |
+    types {
+        text/html                                        html htm shtml;
+        text/css                                         css;
+        text/xml                                         xml;
+        image/gif                                        gif;
+        image/jpeg                                       jpeg jpg;
+        application/javascript                           js;
+        image/png                                        png;
+        image/svg+xml                                    svg svgz;
+        image/tiff                                       tif tiff;
+        image/x-icon                                     ico;
+        image/x-jng                                      jng;
+        application/font-woff                            woff;
+        application/json                                 json;
+        application/zip                                  zip;
+    }
+  nginx.conf: |
+    worker_processes 4;
+
+    events {
+      worker_connections 1024;
+    }
+
+    http {
+      include mime.types;
+      index index.html;
+      sendfile on;
+
+      server {
+        listen 80 default_server;
+
+        access_log off;
+        add_header X-Clacks-Overhead          "GNU DCG; JK; MK";
+        add_header Feature-Policy             "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; magnetometer 'none'; microphone 'none'; payment 'none'; usb 'none'";
+
+        location ~ ^/static.* {
+          root /assets;
+          expires 14d;
+        }
+
+        location / {
+          root /assets;
+          try_files $uri $uri/ /index.html;
+          expires 1s;
+        }
+      }
+    }

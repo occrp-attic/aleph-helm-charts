@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingest-file
+  # namespace: {{ .Values.global.namespace }}
+  labels:
+    app: ingest-file
+spec:
+  selector:
+    matchLabels:
+      app: ingest-file
+  strategy: {{- toYaml .Values.strategy | nindent 4 }}
+  template:
+    metadata:
+      labels:
+        app: ingest-file
+      annotations: {{- toYaml .Values.podAnnotations | nindent 8 }}
+    spec:
+      nodeSelector: {{- toYaml .Values.nodeSelector | nindent 8 }}
+      restartPolicy: Always
+      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds:
+        {{ .Values.terminationGracePeriodSeconds }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.global.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - ingestors
+            - process
+          ports:
+            - containerPort: 3000
+              name: http
+          volumeMounts:
+            {{ if .Values.global.google }}
+            - mountPath: /var/secrets/google
+              name: ingest-file-service-account
+            {{ end }}
+            - mountPath: /tmp
+              name: tmp-volume
+            - mountPath: /home/app
+              name: home-volume
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          resources:
+            {{- toYaml .Values.containerResources | nindent 12 }}
+          env:
+            {{- range $key, $value := .Values.global.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}  
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }} 
+            - name: FTM_STORE_URI
+              value: {{ .Values.global.secretenv.FTM_STORE_URI }}
+      volumes:
+        {{ if .Values.global.google }}
+        - name: ingest-file-service-account
+          secret:
+            secretName: ingest-file-service-account
+        {{ end }}
+        - name: tmp-volume
+          emptyDir: {}
+        - name: home-volume
+          emptyDir:
+            medium: Memory
