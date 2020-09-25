@@ -19,7 +19,7 @@ podSecurityContext:
 image:
   repository: alephdata/convert-document
   pullPolicy: Always
-  tag: "d1ce0b9618d588a6600eb0a81ceec1c62172b1ac"
+  tag: "38f168c2eb86013de95861c895bfdae0c4de7611"
 
 containerSecurityContext:
   readOnlyRootFilesystem: true
