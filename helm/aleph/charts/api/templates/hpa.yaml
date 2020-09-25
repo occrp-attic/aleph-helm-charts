@@ -1,13 +1,13 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: aleph-worker
+  name: {{ .Values.global.namingPrefix }}-api
   # namespace: {{.Values.global.namespace}}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: aleph-worker
+    name: {{ .Values.global.namingPrefix }}-api
   minReplicas: {{.Values.hpa.minReplicas}}
   maxReplicas: {{.Values.hpa.maxReplicas}}
   metrics: {{- toYaml .Values.hpa.scalingMetrics | nindent 4}}

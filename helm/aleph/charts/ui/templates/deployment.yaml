@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aleph-ui
+  name: {{ .Values.global.namingPrefix }}-ui
   namespace: {{ .Values.namespace }}
   labels:
-    app: aleph-ui
+    app: {{ .Values.global.namingPrefix }}-ui
 spec:
   replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
-      app: aleph-ui
+      app: {{ .Values.global.namingPrefix }}-ui
   strategy: {{- toYaml .Values.strategy | nindent 4 }}
   template:
     metadata:
       labels:
-        app: aleph-ui
+        app: {{ .Values.global.namingPrefix }}-ui
       annotations: {{- toYaml .Values.podAnnotations | nindent 8 }}
     spec:
       nodeSelector: {{- toYaml .Values.nodeSelector | nindent 8 }}
@@ -25,7 +25,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.global.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
-            - name: aleph-ui-config
+            - name: {{ .Values.global.namingPrefix }}-ui-config
               mountPath: /etc/nginx
               readOnly: true
           securityContext:
@@ -45,6 +45,6 @@ spec:
             initialDelaySeconds: 3
             periodSeconds: 5
       volumes:
-        - name: aleph-ui-config
+        - name: {{ .Values.global.namingPrefix }}-ui-config
           configMap:
-            name: aleph-ui-config
+            name: {{ .Values.global.namingPrefix }}-ui-config

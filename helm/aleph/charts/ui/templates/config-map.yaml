@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: aleph-ui-config
+  name: {{ .Values.global.namingPrefix }}-ui-config
   namespace: {{ .Values.global.namepsace }}
 data:
   {{- toYaml .Values.nginxConfig | nindent 2 }}

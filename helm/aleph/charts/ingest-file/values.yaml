@@ -38,7 +38,7 @@ google: false
 env:
   WORKER_THREADS: 0
   OCR_VISION_API: false
-  INGESTORS_CONVERT_DOCUMENT_URL: http://convert-document.default.svc.cluster.local:3000/convert
+  INGESTORS_CONVERT_DOCUMENT_URL: http://aleph-convert-document.default.svc.cluster.local:3000/convert
 
 # Scaling - templates/hpa.yaml
 

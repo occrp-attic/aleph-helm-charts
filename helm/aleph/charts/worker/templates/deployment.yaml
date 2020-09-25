@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aleph-api
+  name: {{ .Values.global.namingPrefix }}-worker
   # namespace: {{ .Values.global.namespace }}
   labels:
-    app: aleph-api
+    app: {{ .Values.global.namingPrefix }}-worker
 spec:
   selector:
     matchLabels:
-      app: aleph-api
+      app: {{ .Values.global.namingPrefix }}-worker
   strategy: {{- toYaml .Values.strategy | nindent 4 }}
   template:
     metadata:
       labels:
-        app: aleph-api
+        app: {{ .Values.global.namingPrefix }}-worker
       annotations: {{- toYaml .Values.podAnnotations | nindent 8 }}
     spec:
       nodeSelector: {{- toYaml .Values.nodeSelector | nindent 8 }}
@@ -23,25 +23,7 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command:
-            - gunicorn
-            - "--timeout"
-            - "3600"
-            - "--keep-alive"
-            - "60"
-            - "--threads"
-            - "10"
-            # - '--worker-class'
-            # - 'eventlet'
-            - "--bind"
-            - 0.0.0.0:8000
-            - --log-level
-            - debug
-            - --log-file
-            - "-"
-            - --access-logfile
-            - "-"
-            - aleph.wsgi:app
+          command: ["aleph", "worker"]
           volumeMounts:
             {{ if .Values.global.google }}
             - mountPath: /var/secrets/google
@@ -101,28 +83,15 @@ spec:
                   name: aleph-secrets
                   key: AWS_SECRET_ACCESS_KEY
             {{ end }}
-          readinessProbe:
-            httpGet:
-              path: /healthz?ready
-              port: 8000
-            initialDelaySeconds: 5
-            # timeoutSeconds: 5
-            # periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /healthz?live
-              port: 8000
-            initialDelaySeconds: 5
-            # timeoutSeconds: 5
-            # periodSeconds: 20
-            # failureThreshold: 10
       volumes:
         {{ if .Values.global.google }}
         - name: service-account-aleph
           secret:
             secretName: service-account-aleph
         {{ end }}
-        - name: tmp-volume
-          emptyDir: {}
         - name: home-volume
-          emptyDir: {}
+          emptyDir:
+            medium: Memory
+        - name: tmp-volume
+          emptyDir:
+            medium: Memory

@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: convert-document
+  name: {{ .Values.global.namingPrefix }}-convert-document
   # namespace: {{.Values.global.namespace}}
   labels:
-    app: convert-document
+    app: {{ .Values.global.namingPrefix }}-convert-document
 spec:
   selector:
     matchLabels:
-      app: convert-document
+      app: {{ .Values.global.namingPrefix }}-convert-document
   strategy: {{- toYaml .Values.strategy | nindent 6}}
   template:
     metadata:
       labels:
-        app: convert-document
+        app: {{ .Values.global.namingPrefix }}-convert-document
       annotations: {{- toYaml .Values.podAnnotations | nindent 8}}
     spec:
       nodeSelector: {{- toYaml .Values.nodeSelector | nindent 8}}

@@ -1,4 +1,5 @@
 ENV="staging"
+PREFIX="aleph"
 
 create-cluster:
 	@echo "🔴 Creating a k8s cluster ..."
@@ -24,19 +25,19 @@ update-helm:
 
 install-postgres: update-helm
 	@echo "🔴 Installing Postgres database ..."
-	helm install postgres bitnami/postgresql -f helm/values/postgres.yml -n $(ENV)
+	helm install $(PREFIX)-postgres bitnami/postgresql -f helm/values/postgres.yml -n $(ENV)
 
 install-elasticsearch: update-helm
 	@echo "🔴 Installing Elasticsearch cluster ..."
-	helm install search-index-master elastic/elasticsearch -f helm/values/elasticsearch-master.yml -n $(ENV)
-	helm install search-index-data elastic/elasticsearch -f helm/values/elasticsearch-data.yml -n $(ENV)
+	helm install $(PREFIX)-index-master elastic/elasticsearch -f helm/values/elasticsearch-master.yml --set masterService="$(PREFIX)-index-master" --set clusterName="$(PREFIX)-index" -n $(ENV)
+	helm install $(PREFIX)-index-data elastic/elasticsearch -f helm/values/elasticsearch-data.yml --set masterService="$(PREFIX)-index-master" --set clusterName="$(PREFIX)-index" -n $(ENV)
 
 install-k8s-dashboard: update-helm
 	helm install k8s-dashboard k8s-dashboard/kubernetes-dashboard
 
 install-redis: update-helm
 	@echo "🔴 Installing Redis ..."
-	helm install redis stable/redis -f helm/values/redis.yml -n $(ENV)
+	helm install $(PREFIX)-redis stable/redis -f helm/values/redis.yml -n $(ENV)
 
 
 install-ingress:
@@ -63,4 +64,4 @@ create-services: install-postgres install-elasticsearch install-redis
 
 install-aleph:
 	@echo "🔴 Installing Aleph  ..."
-	helm install aleph ./helm/aleph -f ./helm/values/$(ENV).yaml -n $(ENV)
+	helm install aleph ./helm/aleph -f ./helm/values/$(ENV).yaml -n $(ENV) --timeout 10m0s

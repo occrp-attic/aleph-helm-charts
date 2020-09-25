@@ -2,6 +2,8 @@ global:
   google: false  # Are we using any google services? Storage, Vision API?
   amazon: true   # Are we using amazon s3 for storage?
 
+  namingPrefix: aleph  # prefix for service names. eg: with prefix=aleph the api will be named aleph-api
+
   image:
     repository: alephdata/aleph
     tag: "ac7fc31c8538364166849e3a8e8e52721ecc5c59"
@@ -28,7 +30,7 @@ global:
     ALEPH_UI_URL: http://localhost
     # ALEPH_FAVICON: https://cdn.occrp.org/common/logo/RedTransparent_globe.png
     # ALEPH_LOGO: https://cdn.occrp.org/common/logo/WhiteTransparent_globe.png
-    ALEPH_ELASTICSEARCH_URI: http://search-index-data-headless.default.svc.cluster.local:9200
+    ALEPH_ELASTICSEARCH_URI: http://aleph-index-master.default.svc.cluster.local:9200
     ALEPH_INDEX_PREFIX: "aleph"
     ALEPH_INDEX_WRITE: "v2"
     ALEPH_INDEX_READ: "v1:v2"
@@ -41,5 +43,5 @@ global:
     # ALEPH_OAUTH_BASE_URL: https://secure.occrp.org/
     # ALEPH_OAUTH_TOKEN_URL: https://secure.occrp.org/auth/realms/general/protocol/openid-connect/token
     # ALEPH_OAUTH_AUTHORIZE_URL: https://secure.occrp.org/auth/realms/general/protocol/openid-connect/auth
-    REDIS_URL: redis://redis-headless.default.svc.cluster.local:6379/0
+    REDIS_URL: redis://aleph-redis-master.default.svc.cluster.local:6379/0
     ELASTICSEARCH_TIMEOUT: "600"

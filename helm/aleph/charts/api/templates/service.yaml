@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: aleph-api
+  name: {{ .Values.global.namingPrefix }}-api
   # namespace: {{ .Values.global.namespace }}
   labels:
-    app: aleph-api
+    app: {{ .Values.global.namingPrefix }}-api
 spec:
   selector:
-    app: aleph-api
+    app: {{ .Values.global.namingPrefix }}-api
   ports:
     - port: 8000
       targetPort: 8000

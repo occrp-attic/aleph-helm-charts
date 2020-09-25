@@ -1,13 +1,13 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: ingest-file
+  name: {{ .Values.global.namingPrefix }}-ingest-file
   # namespace: {{.Values.global.namespace}}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: ingest-file
+    name: {{ .Values.global.namingPrefix }}-ingest-file
   minReplicas: {{.Values.hpa.minReplicas}}
   maxReplicas: {{.Values.hpa.maxReplicas}}
   metrics: {{- toYaml .Values.hpa.scalingMetrics | nindent 4}}

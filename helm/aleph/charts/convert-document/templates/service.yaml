@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: convert-document
+  name: {{ .Values.global.namingPrefix }}-convert-document
   # namespace: {{.Values.global.namespace}}
   labels:
-    app: convert-document
+    app: {{ .Values.global.namingPrefix }}-convert-document
 spec:
   selector:
-    app: convert-document
+    app: {{ .Values.global.namingPrefix }}-convert-document
   type: {{.Values.service.type}}
   ports:
     - port: {{.Values.service.port}}

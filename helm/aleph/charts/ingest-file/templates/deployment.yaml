@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ingest-file
+  name: {{ .Values.global.namingPrefix }}-ingest-file
   # namespace: {{ .Values.global.namespace }}
   labels:
-    app: ingest-file
+    app: {{ .Values.global.namingPrefix }}-ingest-file
 spec:
   selector:
     matchLabels:
-      app: ingest-file
+      app: {{ .Values.global.namingPrefix }}-ingest-file
   strategy: {{- toYaml .Values.strategy | nindent 4 }}
   template:
     metadata:
       labels:
-        app: ingest-file
+        app: {{ .Values.global.namingPrefix }}-ingest-file
       annotations: {{- toYaml .Values.podAnnotations | nindent 8 }}
     spec:
       nodeSelector: {{- toYaml .Values.nodeSelector | nindent 8 }}
