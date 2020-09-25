@@ -27,12 +27,18 @@ kubectl config use-context staging
 
 Set up services like redis, postgres, es
 ```
-make create-services
+make create-services ENV=staging
+```
+
+Create secrets etc
+```
+make create-secrets ENV=staging
+make create-service-accounts ENV=staging
 ```
 
 Install aleph and related services
 ```
-helm install aleph ./helm/aleph -f ./helm/values/staging.yaml -f ./helm/values/secrets.staging.yaml
+helm install aleph ./helm/aleph -f ./helm/values/staging.yaml
 ```
 
 Install ingress controller

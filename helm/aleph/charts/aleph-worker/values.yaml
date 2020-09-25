@@ -32,8 +32,6 @@ containerResources:
 google: false
 
 env:
-  # Needs google credentials only to access Google Storage and Vision API
-  # GOOGLE_APPLICATION_CREDENTIALS: /var/secrets/google/service-account.json
   WORKER_THREADS: 5
 
 # Scaling - templates/hpa.yaml

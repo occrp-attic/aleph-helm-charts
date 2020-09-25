@@ -1,5 +1,6 @@
 global:
-  google: false
+  google: false  # Are we using any google services? Storage, Vision API?
+  amazon: true   # Are we using amazon s3 for storage?
 
   image:
     repository: alephdata/aleph

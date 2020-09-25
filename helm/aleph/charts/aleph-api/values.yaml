@@ -28,9 +28,7 @@ containerResources:
   limits:
     memory: 3000Mi
 
-env:
-  # Needs google credentials only to access Google Storage and Vision API
-  # GOOGLE_APPLICATION_CREDENTIALS: /var/secrets/google/service-account.json
+env: {}
 
 # Scaling - templates/hpa.yaml
 

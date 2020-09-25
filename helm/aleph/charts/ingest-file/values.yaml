@@ -36,8 +36,6 @@ containerResources:
 google: false
 
 env:
-  # Needs google credentials only to access Google Storage and Vision API
-  # GOOGLE_APPLICATION_CREDENTIALS: /var/secrets/google/service-account.json
   WORKER_THREADS: 0
   OCR_VISION_API: false
   INGESTORS_CONVERT_DOCUMENT_URL: http://convert-document.default.svc.cluster.local:3000/convert
