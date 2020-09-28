@@ -8,7 +8,7 @@ Create cluster
 make create-infra
 ```
 This creates a 7 node cluster named `alephlocal` using [`kind`](https://kind.sigs.k8s.io/). The configuration
-of this cluster can be changed by editing ['kind-config.yml'](kind-config.yml)
+of this cluster can be changed by editing [`kind-config.yml`](kind-config.yml)
 
 
 # Creating namespaces
@@ -49,7 +49,7 @@ This creates Redis, Postgresql and Elasticsearch services using helm. The config
 # Creating secrets
 
 Some configurations like Aleph's secret key, authorized database url etc should be kept secrets. These files are
-stored in `secrets/` directory. **The contents of this directory should be encrypted using (`git-crypt`)[https://github.com/AGWA/git-crypt].**
+stored in `secrets/` directory. **The contents of this directory should be encrypted using [`git-crypt`](https://github.com/AGWA/git-crypt).**
 
 Create secrets etc
 ```
