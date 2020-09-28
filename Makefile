@@ -37,7 +37,7 @@ install-k8s-dashboard: update-helm
 
 install-redis: update-helm
 	@echo "🔴 Installing Redis ..."
-	helm install $(PREFIX)-redis stable/redis -f charts/values/redis.yml -n $(ENV)
+	helm install $(PREFIX)-redis bitnami/redis -f charts/values/redis.yml -n $(ENV)
 
 
 install-ingress:
