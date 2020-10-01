@@ -6,7 +6,7 @@ global:
 
   image:
     repository: alephdata/aleph
-    tag: "c682e68e9dcd38a716f919c1802197832abbdaeb"
+    tag: "3.9.2"
 
   env:
     ALEPH_DEBUG: "false"
