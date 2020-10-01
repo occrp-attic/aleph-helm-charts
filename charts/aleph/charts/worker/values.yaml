@@ -29,8 +29,6 @@ containerResources:
     # cpu: 1000m
     memory: 800Mi
 
-google: false
-
 env:
   WORKER_THREADS: 5
 

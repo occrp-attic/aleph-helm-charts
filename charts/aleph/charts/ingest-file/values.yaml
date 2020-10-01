@@ -33,8 +33,6 @@ containerResources:
     # cpu: 1000m
     memory: 3000Mi
 
-google: false
-
 env:
   WORKER_THREADS: 0
   OCR_VISION_API: false
