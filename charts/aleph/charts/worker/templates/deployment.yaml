@@ -93,5 +93,4 @@ spec:
           emptyDir:
             medium: Memory
         - name: tmp-volume
-          emptyDir:
-            medium: Memory
+          emptyDir: {}
