@@ -6,8 +6,7 @@ strategy:
 
 podAnnotations: {}
 
-nodeSelector:
-  tier: application
+nodeSelector: {}
 
 podSecurityContext:
   runAsUser: 1000

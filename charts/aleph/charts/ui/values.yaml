@@ -9,8 +9,7 @@ strategy:
 podAnnotations:
   "cluster-autoscaler.kubernetes.io/safe-to-evict": "true"
 
-nodeSelector:
-  lifespan: transient
+nodeSelector: {}
 
 podSecurityContext: {}
 
