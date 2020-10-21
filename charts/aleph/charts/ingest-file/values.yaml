@@ -17,7 +17,8 @@ podSecurityContext:
 terminationGracePeriodSeconds: 300
 
 image:
-  repository: alephdata/ingest-file
+  repository: ghcr.io/alephdata/ingest-file
+  tag: e3626301a1423403b63d2040ab6ba795fb8c33b0
   pullPolicy: Always
 
 containerSecurityContext:

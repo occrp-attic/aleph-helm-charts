@@ -8,7 +8,7 @@ global:
     REDIS_URL: redis://aleph-redis-master.staging.svc.cluster.local:6379/0
     ARCHIVE_TYPE: s3
     ARCHIVE_BUCKET: aleph-archive
-    AWS_DEFAULT_REGION: eu-west-1
+    ARCHIVE_ENDPOINT_URL: http://aleph-minio.staging.svc.cluster.local:9000
 
 ingest-file:
   env:

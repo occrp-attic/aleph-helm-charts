@@ -17,6 +17,7 @@ add-helm-repo:
 	@echo "🔴 Adding helm repos ..."
 	helm repo add --force-update bitnami https://charts.bitnami.com/bitnami
 	helm repo add --force-update elastic https://helm.elastic.co
+	helm repo add --force-update minio https://helm.min.io/
 
 update-helm:
 	@echo "🔴 Updating the helm repos ..."
@@ -34,6 +35,10 @@ install-elasticsearch: update-helm
 install-redis: update-helm
 	@echo "🔴 Installing Redis ..."
 	helm install $(PREFIX)-redis bitnami/redis -f values/redis.yml -n $(ENV)
+
+install-minio: update-helm
+	@echo "🔴 Installing MinIO ..."
+	helm install $(PREFIX)-minio minio/minio --set accessKey=myaccesskey,secretKey=mysecretkey -n $(ENV)
 
 install-ingress:
 	@echo "🔴 Installing Nginx Ingress  ..."
@@ -55,7 +60,7 @@ create-service-accounts:
 
 create-infra: create-cluster setup-kubectl add-helm-repo update-helm
 
-create-services: install-postgres install-elasticsearch install-redis
+create-services: install-postgres install-elasticsearch install-redis install-minio
 
 install-aleph:
 	@echo "🔴 Installing Aleph  ..."

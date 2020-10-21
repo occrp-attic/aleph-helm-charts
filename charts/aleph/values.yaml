@@ -1,12 +1,12 @@
 global:
-  google: false  # Are we using any google services? Storage, Vision API?
-  amazon: true   # Are we using amazon s3 for storage?
+  google: false # Are we using any google services? Storage, Vision API?
+  amazon: true # Are we using amazon s3 for storage?
 
-  namingPrefix: aleph  # prefix for service names. eg: with prefix=aleph the api will be named aleph-api
+  namingPrefix: aleph # prefix for service names. eg: with prefix=aleph the api will be named aleph-api
 
   image:
     repository: alephdata/aleph
-    tag: "3.9.3"
+    tag: "3.9.4"
 
   env:
     ALEPH_DEBUG: "false"

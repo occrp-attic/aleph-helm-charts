@@ -43,7 +43,7 @@ This activates the `staging` context and all our operations will affect the `sta
 
 # Setting up backend services
 
-Set up services like redis, postgres, es
+Set up services like Redis, Postgres, es. Also installs MinIO as a local S3 alternative.
 
 ```
 make create-services ENV=staging
@@ -84,7 +84,7 @@ helm install aleph ../../charts/aleph -f ./values/staging.yaml -n staging --time
 Or using a packaged helm chart release:
 
 ```
-helm install aleph -f ./values/staging.yaml -n staging --timeout 10m0s https://github.com/alephdata/aleph-helm-charts/releases/download/3.9.1/aleph-3.9.1.tgz
+helm install aleph -f ./values/staging.yaml -n staging --timeout 10m0s https://github.com/alephdata/aleph-helm-charts/releases/download/3.9.4/aleph-3.9.4.tgz
 ```
 
 Configuration values for Aleph can be changed in `values/$(ENV).yaml`
@@ -107,3 +107,7 @@ kubectl apply -f k8s/ingress.staging.yaml
 ```
 
 You'll have to edit the hostnames and create appropriate DNS entries for the hostnames (in `/etc/hosts` in case of localhost).
+
+# Set up port forwarding for MinIO
+
+If using MinIO on a local cluster, you'll need to port forward the service to port 9000 and setup a `/etc/hosts` entry to make it accessible in the host machines browser to serve files directly.

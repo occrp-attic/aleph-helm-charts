@@ -19,7 +19,7 @@ Helm chart for document converter service (https://github.com/alephdata/convert-
 | hpa.scalingMetrics[0].type | string | `"Resource"` |  |
 | image.pullPolicy | string | `"Always"` |  |
 | image.repository | string | `"alephdata/convert-document"` |  |
-| image.tag | string | `"38f168c2eb86013de95861c895bfdae0c4de7611"` |  |
+| image.tag | string | `"428b493ec1a57b3551222556c5ad2c60b129c157"` |  |
 | nodeSelector.lifespan | string | `"transient"` |  |
 | podAnnotations."cluster-autoscaler.kubernetes.io/safe-to-evict" | string | `"true"` |  |
 | podSecurityContext.fsGroup | int | `1000` |  |
