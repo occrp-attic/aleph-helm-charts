@@ -3,7 +3,7 @@ name: Package and Upload Helm Chart Release
 on:
   push:
     tags:
-    - '*'
+      - "*"
 
 jobs:
   build:
@@ -14,7 +14,9 @@ jobs:
         uses: actions/checkout@v2
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        run: |
+          echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+          echo ::set-output name=SHA::$(git rev-parse --short HEAD)
       - name: Package chart
         uses: WyriHaximus/github-action-helm3@v2
         with:
@@ -26,11 +28,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Aleph ${{ steps.get_version.outputs.VERSION }}
+          release_name: Aleph ${{ steps.get_version.outputs.VERSION }}+${{ steps.get_version.outputs.SHA }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
-        id: upload-release-asset 
+        id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
