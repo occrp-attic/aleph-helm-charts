@@ -13,8 +13,10 @@ podSecurityContext:
   runAsGroup: 1000
   fsGroup: 1000
 
-image:
-  pullPolicy: Always
+image: {}
+
+# Scaling:
+replicas: 2
 
 containerSecurityContext:
   readOnlyRootFilesystem: true
@@ -30,14 +32,3 @@ containerResources:
 
 env:
   WORKER_THREADS: 5
-
-# Scaling - templates/hpa.yaml
-
-hpa:
-  minReplicas: 2
-  maxReplicas: 5
-  scalingMetrics:
-    - type: Resource
-      resource:
-        name: cpu
-        targetAverageUtilization: 50
