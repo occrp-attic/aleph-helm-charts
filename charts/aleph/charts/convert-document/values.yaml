@@ -38,7 +38,6 @@ service:
   port: 3000
 
 # Scaling - templates/hpa.yaml
-
 hpa:
   minReplicas: 2
   maxReplicas: 30
