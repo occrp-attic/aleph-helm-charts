@@ -6,12 +6,13 @@ global:
 
   image:
     repository: alephdata/aleph
-    tag: "3.9.4"
+    tag: "3.9.5"
 
   env:
     ALEPH_DEBUG: "false"
     ALEPH_CACHE: "true"
     ALEPH_FORCE_HTTPS: "false"
+    ALEPH_URL_SCHEME: "https"
     ALEPH_APP_TITLE: "Aleph"
     ALEPH_APP_DESCRIPTION: "The global archive of research material for investigative reporting."
     ALEPH_PAGES_PATH: "/aleph/site/aleph.occrp.org/pages"
@@ -38,10 +39,6 @@ global:
     ALEPH_API_RATE_LIMIT: "600"
     ALEPH_OAUTH: "false"
     # ALEPH_OAUTH_KEY: data-occrp-org
-    # ALEPH_OAUTH_HANDLER: keycloak
-    # ALEPH_OAUTH_SCOPE: read
-    # ALEPH_OAUTH_BASE_URL: https://secure.occrp.org/
-    # ALEPH_OAUTH_TOKEN_URL: https://secure.occrp.org/auth/realms/general/protocol/openid-connect/token
-    # ALEPH_OAUTH_AUTHORIZE_URL: https://secure.occrp.org/auth/realms/general/protocol/openid-connect/auth
+    # ALEPH_OAUTH_METADATA_URL: https://secure.occrp.org/auth/realms/general/.well-known/openid-configuration
     REDIS_URL: redis://aleph-redis-master.default.svc.cluster.local:6379/0
     ELASTICSEARCH_TIMEOUT: "600"
