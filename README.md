@@ -6,14 +6,6 @@ This repository contains helm charts to install Aleph and its microservices in a
 
 The umbrella chart is in `charts/aleph` directory. It's configuration options are listed in its [README](charts/aleph/README.md)
 
-For configuration of individual components (the api, ui, worker and other included services), please check the README file in their charts.
-
-- API: [README.md](charts/aleph/charts/api/README.md)
-- UI: [README.md](charts/aleph/charts/ui/README.md)
-- Worker: [README.md](charts/aleph/charts/worker/README.md)
-- Document Converter: [README.md](charts/aleph/charts/convert-document/README.md)
-- Document Ingestor: [README.md](charts/aleph/charts/ingest-file/README.md)
-
 ## Releases
 
 Packaged helm charts are released as tar archives. They are listed [here](https://github.com/alephdata/aleph-helm-charts/releases)

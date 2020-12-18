@@ -39,13 +39,3 @@ A Helm chart for Aleph
 | global.env.REDIS_URL | string | `"redis://aleph-redis-master.default.svc.cluster.local:6379/0"` | Redis url |
 
 Checkout [https://docs.alephdata.org/developers/installation#configuration](https://docs.alephdata.org/developers/installation#configuration) for all available options.
-
-### Configuration for sub-charts
-
-For configuring the api, ui, worker and other included services, please check the README file in their chart.
-
-- API: [README.md](charts/api/README.md)
-- UI: [README.md](charts/ui/README.md)
-- Worker: [README.md](charts/worker/README.md)
-- Document Converter: [README.md](charts/convert-document/README.md)
-- Document Ingestor: [README.md](charts/ingest-file/README.md)

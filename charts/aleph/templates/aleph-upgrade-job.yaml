@@ -1,50 +1,55 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: {{ .Values.global.namingPrefix }}-worker
-  # namespace: {{ .Values.global.namespace }}
+  name: aleph-upgrade
   labels:
-    app: {{ .Values.global.namingPrefix }}-worker
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-install,pre-upgrade
+    # "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
 spec:
-  replicas: {{ .Values.replicas }}
-  selector:
-    matchLabels:
-      app: {{ .Values.global.namingPrefix }}-worker
-  strategy: {{- toYaml .Values.strategy | nindent 4 }}
+  backoffLimit: 1
+  ttlSecondsAfterFinished: 60
+  parallelism: 1
+  completions: 1
   template:
     metadata:
+      name: aleph-upgrade
       labels:
-        app: {{ .Values.global.namingPrefix }}-worker
-      annotations: {{- toYaml .Values.podAnnotations | nindent 8 }}
+        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     spec:
-      nodeSelector: {{- toYaml .Values.nodeSelector | nindent 8 }}
-      restartPolicy: Always
-      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      nodeSelector: {{- toYaml .Values.upgrade.nodeSelector | nindent 8 }}
+      restartPolicy: Never
+      securityContext: {{- toYaml .Values.upgrade.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: aleph-upgrade
           image: "{{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}"
-          imagePullPolicy: Always
-          command: ["aleph", "worker"]
+          imagePullPolicy: {{ .Values.global.image.pullPolicy }}
+          command: ["aleph", "upgrade"]
           volumeMounts:
             {{ if .Values.global.google }}
             - mountPath: /var/secrets/google
               name: service-account-aleph
               readOnly: true
             {{ end }}
-            - mountPath: /tmp
-              name: tmp-volume
-            - mountPath: /home/app
-              name: home-volume
           securityContext:
-            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+            {{- toYaml .Values.upgrade.containerSecurityContext | nindent 12 }}
           resources:
-            {{- toYaml .Values.containerResources | nindent 12 }}
+            {{- toYaml .Values.upgrade.containerResources | nindent 12 }}
           env:
             {{- range $key, $value := .Values.global.env }}
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}  
-            {{- range $key, $value := .Values.env }}
+            {{- range $key, $value := .Values.upgrade.env }}
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
@@ -90,8 +95,3 @@ spec:
           secret:
             secretName: service-account-aleph
         {{ end }}
-        - name: home-volume
-          emptyDir:
-            medium: Memory
-        - name: tmp-volume
-          emptyDir: {}

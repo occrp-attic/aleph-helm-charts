@@ -2,29 +2,28 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.global.namingPrefix }}-ingest-file
-  # namespace: {{ .Values.global.namespace }}
   labels:
     app: {{ .Values.global.namingPrefix }}-ingest-file
 spec:
   selector:
     matchLabels:
       app: {{ .Values.global.namingPrefix }}-ingest-file
-  strategy: {{- toYaml .Values.strategy | nindent 4 }}
+  strategy: {{- toYaml .Values.ingestfile.strategy | nindent 4 }}
   template:
     metadata:
       labels:
         app: {{ .Values.global.namingPrefix }}-ingest-file
-      annotations: {{- toYaml .Values.podAnnotations | nindent 8 }}
+      annotations: {{- toYaml .Values.ingestfile.podAnnotations | nindent 8 }}
     spec:
-      nodeSelector: {{- toYaml .Values.nodeSelector | nindent 8 }}
+      nodeSelector: {{- toYaml .Values.ingestfile.nodeSelector | nindent 8 }}
       restartPolicy: Always
-      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      securityContext: {{- toYaml .Values.ingestfile.podSecurityContext | nindent 8 }}
       terminationGracePeriodSeconds:
-        {{ .Values.terminationGracePeriodSeconds }}
+        {{ .Values.ingestfile.terminationGracePeriodSeconds }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.ingestfile.image.repository }}:{{ .Values.ingestfile.image.tag }}"
+          imagePullPolicy: {{ .Values.ingestfile.image.pullPolicy }}
           command:
             - ingestors
             - process
@@ -41,15 +40,15 @@ spec:
             - mountPath: /home/app
               name: home-volume
           securityContext:
-            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+            {{- toYaml .Values.ingestfile.containerSecurityContext | nindent 12 }}
           resources:
-            {{- toYaml .Values.containerResources | nindent 12 }}
+            {{- toYaml .Values.ingestfile.containerResources | nindent 12 }}
           env:
             {{- range $key, $value := .Values.global.env }}
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}  
-            {{- range $key, $value := .Values.env }}
+            {{- range $key, $value := .Values.ingestfile.env }}
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }} 
@@ -85,3 +84,27 @@ spec:
         - name: home-volume
           emptyDir:
             medium: Memory
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Values.global.namingPrefix }}-ingest-file
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Values.global.namingPrefix }}-ingest-file
+  minReplicas: {{.Values.ingestfile.hpa.minReplicas}}
+  maxReplicas: {{.Values.ingestfile.hpa.maxReplicas}}
+  metrics: {{- toYaml .Values.ingestfile.hpa.scalingMetrics | nindent 4}}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Values.global.namingPrefix }}-ingest-file-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ .Values.global.namingPrefix }}-ingest-file
+  policyTypes:
+    - Ingress

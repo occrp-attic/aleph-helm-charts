@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ .Values.global.namingPrefix }}-ui-config
-data:
-  {{- toYaml .Values.nginxConfig | nindent 2 }}

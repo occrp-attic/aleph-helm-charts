@@ -1,47 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.global.namingPrefix }}-api
-  # namespace: {{ .Values.global.namespace }}
+  name: {{ .Values.global.namingPrefix }}-worker
   labels:
-    app: {{ .Values.global.namingPrefix }}-api
+    app: {{ .Values.global.namingPrefix }}-worker
 spec:
+  replicas: {{ .Values.worker.replicas }}
   selector:
     matchLabels:
-      app: {{ .Values.global.namingPrefix }}-api
-  strategy: {{- toYaml .Values.strategy | nindent 4 }}
+      app: {{ .Values.global.namingPrefix }}-worker
+  strategy: {{- toYaml .Values.worker.strategy | nindent 4 }}
   template:
     metadata:
       labels:
-        app: {{ .Values.global.namingPrefix }}-api
-      annotations: {{- toYaml .Values.podAnnotations | nindent 8 }}
+        app: {{ .Values.global.namingPrefix }}-worker
+      annotations: {{- toYaml .Values.worker.podAnnotations | nindent 8 }}
     spec:
-      nodeSelector: {{- toYaml .Values.nodeSelector | nindent 8 }}
+      nodeSelector: {{- toYaml .Values.worker.nodeSelector | nindent 8 }}
       restartPolicy: Always
-      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      securityContext: {{- toYaml .Values.worker.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command:
-            - gunicorn
-            - "--timeout"
-            - "3600"
-            - "--keep-alive"
-            - "60"
-            - "--threads"
-            - "10"
-            # - '--worker-class'
-            # - 'eventlet'
-            - "--bind"
-            - 0.0.0.0:8000
-            - --log-level
-            - warning
-            - --log-file
-            - "-"
-            - --access-logfile
-            - "-"
-            - aleph.wsgi:app
+          imagePullPolicy: Always
+          command: ["aleph", "worker"]
           volumeMounts:
             {{ if .Values.global.google }}
             - mountPath: /var/secrets/google
@@ -53,15 +35,15 @@ spec:
             - mountPath: /home/app
               name: home-volume
           securityContext:
-            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+            {{- toYaml .Values.worker.containerSecurityContext | nindent 12 }}
           resources:
-            {{- toYaml .Values.containerResources | nindent 12 }}
+            {{- toYaml .Values.worker.containerResources | nindent 12 }}
           env:
             {{- range $key, $value := .Values.global.env }}
             - name: {{ $key }}
               value: {{ $value | quote }}
-            {{- end }}
-            {{- range $key, $value := .Values.env }}
+            {{- end }}  
+            {{- range $key, $value := .Values.worker.env }}
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
@@ -101,28 +83,14 @@ spec:
                   name: aleph-secrets
                   key: AWS_SECRET_ACCESS_KEY
             {{ end }}
-          readinessProbe:
-            httpGet:
-              path: /healthz?ready
-              port: 8000
-            initialDelaySeconds: 5
-            # timeoutSeconds: 5
-            # periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /healthz?live
-              port: 8000
-            initialDelaySeconds: 5
-            # timeoutSeconds: 5
-            # periodSeconds: 20
-            # failureThreshold: 10
       volumes:
         {{ if .Values.global.google }}
         - name: service-account-aleph
           secret:
             secretName: service-account-aleph
         {{ end }}
-        - name: tmp-volume
-          emptyDir: {}
         - name: home-volume
+          emptyDir:
+            medium: Memory
+        - name: tmp-volume
           emptyDir: {}
