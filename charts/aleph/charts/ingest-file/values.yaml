@@ -18,7 +18,7 @@ terminationGracePeriodSeconds: 300
 
 image:
   repository: ghcr.io/alephdata/ingest-file
-  tag: 76b76547e8d55348f71736428a89e1869b66acb7
+  tag: 047f429fe2e1343a3105592a4f944f70f9c8ab5b
   pullPolicy: Always
 
 containerSecurityContext:
