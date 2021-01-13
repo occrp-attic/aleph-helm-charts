@@ -39,10 +39,14 @@ spec:
           resources:
             {{- toYaml .Values.worker.containerResources | nindent 12 }}
           env:
+            {{- range $key, $value := .Values.global.commonEnv }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
             {{- range $key, $value := .Values.global.env }}
             - name: {{ $key }}
               value: {{ $value | quote }}
-            {{- end }}  
+            {{- end }}
             {{- range $key, $value := .Values.worker.env }}
             - name: {{ $key }}
               value: {{ $value | quote }}

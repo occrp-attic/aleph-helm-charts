@@ -44,7 +44,7 @@ spec:
           resources:
             {{- toYaml .Values.ingestfile.containerResources | nindent 12 }}
           env:
-            {{- range $key, $value := .Values.global.env }}
+            {{- range $key, $value := .Values.global.commonEnv }}
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}  

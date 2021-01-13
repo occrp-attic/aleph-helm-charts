@@ -9,6 +9,10 @@ global:
     tag: "3.9.8"
     pullPolicy: Always
 
+  commonEnv:
+    # LOG_FORMAT: JSON
+    REDIS_URL: redis://aleph-redis-master.default.svc.cluster.local:6379/0
+
   env:
     ALEPH_DEBUG: "false"
     ALEPH_CACHE: "true"
@@ -41,9 +45,7 @@ global:
     ALEPH_OAUTH: "false"
     # ALEPH_OAUTH_KEY: data-occrp-org
     # ALEPH_OAUTH_METADATA_URL: https://secure.occrp.org/auth/realms/general/.well-known/openid-configuration
-    REDIS_URL: redis://aleph-redis-master.default.svc.cluster.local:6379/0
     ELASTICSEARCH_TIMEOUT: "600"
-    # LOG_FORMAT: JSON
 
 # Aleph API - templates/api.yaml
 api:
@@ -266,7 +268,6 @@ ui:
           }
         }
       }
-
 
 # Aleph Worker - templates/worker.yaml
 worker:
