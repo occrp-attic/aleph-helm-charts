@@ -43,6 +43,7 @@ global:
     # ALEPH_OAUTH_METADATA_URL: https://secure.occrp.org/auth/realms/general/.well-known/openid-configuration
     REDIS_URL: redis://aleph-redis-master.default.svc.cluster.local:6379/0
     ELASTICSEARCH_TIMEOUT: "600"
+    # LOG_FORMAT: JSON
 
 # Aleph API - templates/api.yaml
 api:
@@ -109,9 +110,9 @@ convertdocument:
     fsGroup: 1000
 
   image:
-    repository: alephdata/convert-document
+    repository: ghcr.io/alephdata/convert-document
     pullPolicy: Always
-    tag: "428b493ec1a57b3551222556c5ad2c60b129c157"
+    tag: 3.11.2
 
   containerSecurityContext:
     readOnlyRootFilesystem: true
@@ -159,7 +160,7 @@ ingestfile:
 
   image:
     repository: ghcr.io/alephdata/ingest-file
-    tag: 76b76547e8d55348f71736428a89e1869b66acb7
+    tag: 3.11.2
     pullPolicy: Always
 
   containerSecurityContext:

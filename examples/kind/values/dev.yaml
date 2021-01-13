@@ -13,6 +13,6 @@ global:
     ARCHIVE_BUCKET: aleph-archive
     ARCHIVE_ENDPOINT_URL: http://aleph-minio.dev.svc.cluster.local:9000
 
-ingest-file:
+ingestfile:
   env:
     INGESTORS_CONVERT_DOCUMENT_URL: http://aleph-convert-document.dev.svc.cluster.local:3000/convert
