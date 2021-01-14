@@ -6,7 +6,7 @@ global:
 
   image:
     repository: alephdata/aleph
-    tag: "3.9.8"
+    tag: "3.9.9"
 
   env:
     ALEPH_DEBUG: "false"
@@ -42,3 +42,4 @@ global:
     # ALEPH_OAUTH_METADATA_URL: https://secure.occrp.org/auth/realms/general/.well-known/openid-configuration
     REDIS_URL: redis://aleph-redis-master.default.svc.cluster.local:6379/0
     ELASTICSEARCH_TIMEOUT: "600"
+    LOG_FORMAT: TEXT

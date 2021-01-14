@@ -2,7 +2,7 @@ global:
   google: false
   image:
     repository: alephdata/aleph
-    tag: "3.9.8"
+    tag: "3.9.9"
   env:
     ALEPH_APP_TITLE: "Aleph Dev"
     ALEPH_APP_DESCRIPTION: "Dev archive of research material for investigative reporting."
